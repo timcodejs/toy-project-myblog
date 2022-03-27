@@ -1,10 +1,11 @@
 import React from "react";
 import Layout from "../_layout/layout";
+import LoginMain from "../components/login/loginMain";
 
 const Login = () => {
     return(
         <Layout>
-            <div>Login</div>
+            <LoginMain />
         </Layout>
     )
 }
