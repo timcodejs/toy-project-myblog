@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Post from "./post/post";
 import PostForm from "./post/postform";
+import { useSelector, useDispatch } from 'react-redux';
+import { LOAD_ALLPOSTS_REQUEST } from "../../reducer/post";
 
 const HomeMain = () => {
+    const dispatch = useDispatch();
+    const { allPosts } = useSelector((state) => state.post);
+
+    useEffect(() => {
+        dispatch({
+            type: LOAD_ALLPOSTS_REQUEST,
+        })
+    }, [dispatch]);
+
     return(
         <StyledWrap>
             <PostForm />
-            <Post />
+            {allPosts && allPosts.map((post) => <Post key={post.id} post={post} />)}
         </StyledWrap>
     )
 }

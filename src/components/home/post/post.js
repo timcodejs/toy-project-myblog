@@ -4,12 +4,22 @@ import styled from "styled-components";
 import Avatar from './avatar';
 import Comment from './comment';
 import CommentForm from './commentForm';
+import { useDispatch } from 'react-redux';
+import { REMOVE_POST_REQUEST } from "../../../reducer/post";
 
 moment.locale("ko");
 
-const Post = () => {
+const Post = ({post}) => {
     const [editPost, setEditPost] = useState(false);
     const [commentBox, setCommentBox] = useState(false);
+    const dispatch = useDispatch();
+
+    const onRemovePost = useCallback(() => {
+        dispatch({
+            type: REMOVE_POST_REQUEST,
+            data: post.id
+        })
+    }, [dispatch, post]);
 
     const onToggleComment = useCallback((e) => {
         e.preventDefault();
@@ -22,7 +32,7 @@ const Post = () => {
                 <div className="inner">
                     <Avatar />
                     <div className="name-date">
-                        <div className="name">태원님</div>
+                        <div className="name">{post.User.nickname}</div>
                         <div className="date">{moment().format("YYYY.MM.DD")}</div>
                     </div>
                 </div>
@@ -32,7 +42,7 @@ const Post = () => {
                     }}>
                         수정
                     </button>
-                    <button className="editBtn">삭제</button>
+                    <button className="editBtn" onClick={onRemovePost}>삭제</button>
                 </div>
             </div>
             {editPost 
@@ -43,16 +53,16 @@ const Post = () => {
                 </>
             ) 
             : (
-                <div className="content">내용</div>
+                <div className="content">{post.content}</div>
             )}
             <div className="comment" onClick={onToggleComment}>
-                <div className="total">댓글 1개</div>
+                <div className="total">댓글 {post.Comments.length}개</div>
                 <div className="commentBtn">댓글 달기</div>
             </div>
             {commentBox && (
                 <>
                     <CommentForm />
-                    <Comment />
+                    <Comment comments={post.Comments} postId={post.id} />
                 </>
             )}
         </StyledPost>

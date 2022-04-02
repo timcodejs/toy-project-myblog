@@ -1,25 +1,46 @@
-import React, { useCallback } from "react";
-import { Link } from "react-router-dom";
+import React, { useCallback, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useInput } from "../../hook/useinput";
+import { useDispatch, useSelector } from "react-redux";
+import { LOG_IN_REQUEST } from "../../reducer/user";
 
 const LoginMain = () => {
     const [email, onChangeEmail] = useInput("");
     const [password, onChangePassword] = useInput("");
+    const dispatch = useDispatch();
+    const navigator = useNavigate();
+    const { info } = useSelector((state) => state.user);
     
+    useEffect(() => {
+        if(info) {
+            navigator("/");
+        }
+    }, [info, navigator]);
+
+    const onLogin = useCallback(() => {
+        dispatch({
+            type: LOG_IN_REQUEST,
+            data: {
+                email: email, 
+                password: password
+            }
+        })
+    }, [dispatch, email, password]);
+
     return(
         <>
             <LoginTemplate>
                 <h1>로그인</h1>
                 <div>
-                    <label htmlFor=""user-email></label>
+                    <label htmlFor="user-email"></label>
                     <input name="user-email" type="text" placeholder="이메일을 입력해주세요" value={email} onChange={onChangeEmail} autoComplete="off" required />
                 </div>
                 <div>
-                    <label htmlFor=""user-password></label>
+                    <label htmlFor="user-password"></label>
                     <input name="user-password" type="password" placeholder="비밀번호를 입력해주세요" value={password} onChange={onChangePassword} autoComplete="off" required />
                 </div>
-                <button>로그인</button>
+                <button onClick={onLogin}>로그인</button>
                 <Link to='/register'>아직 회원이 아니신가요?</Link>
             </LoginTemplate>
         </>

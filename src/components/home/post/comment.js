@@ -4,16 +4,18 @@ import moment from 'moment';
 
 moment.locale("ko");
 
-const Comment = () => {
+const Comment = ({comments, postId}) => {
     return(
         <StyledComment>
-            <div className="inner">
-                <div className="username">찬솔님</div>
-                <div className="text">내용 멋있네요</div>
-                <div className="date">{moment().format("YYYY.MM.DD")}</div>
-                <div className="replyBtn">💬</div>
-                <div className="removeBtn">❌</div>
-            </div>
+            {comments && comments.map((v) => (
+                <div className="inner" key={v.id}>
+                    <div className="username">{v.User.nickname}</div>
+                    <div className="text">{v.content}</div>
+                    <div className="date">{moment().format("YYYY.MM.DD")}</div>
+                    <div className="replyBtn">💬</div>
+                    <div className="removeBtn">❌</div>
+                </div>
+            ))}
         </StyledComment>
     )
 }

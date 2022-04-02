@@ -1,14 +1,33 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { useInput } from "../../../hook/useinput";
+import { useSelector, useDispatch } from "react-redux";
+import { ADD_POST_REQUEST } from "../../../reducer/post";
 
 const PostForm = () => {
-    const [content, inChangeCOntent] = useInput("");
+    const [content, onChangeContent, setContent] = useInput("");
+    const dispatch = useDispatch();
+    const { addpostDone } = useSelector((state) => state.post);
+
+    useEffect(() => {
+        if(addpostDone) {
+            setContent("");
+        }
+    }, [addpostDone, setContent])
+
+    const onSubmithandler = useCallback((e) => {
+        e.preventDefault();
+        dispatch({
+            type: ADD_POST_REQUEST,
+            data: content,
+        });
+
+    }, [content, dispatch])
 
     return(
-        <StyledPostForm>
-            <textarea cols="80" row="5" value={content} onChange={inChangeCOntent} placeholder="태원님, 오늘은 어떤 일이 있었나요?" autoComplete="off" />
-            <button>등록</button>
+        <StyledPostForm onSubmit={onSubmithandler}>
+            <textarea cols="80" row="5" value={content} onChange={onChangeContent} placeholder="태원님, 오늘은 어떤 일이 있었나요?" autoComplete="off" />
+            <button type="submit">등록</button>
         </StyledPostForm>
     )
 }
