@@ -5,6 +5,9 @@ const initialState = {
     loginLoading: false,
     loginDone: false,
     loginError: null,
+    logoutLoading: false,
+    logoutDone: false,
+    logoutError: null,
 }
 
 const dummyUser = (data) => ({
@@ -19,6 +22,10 @@ const dummyUser = (data) => ({
 export const LOG_IN_REQUEST = "LOG_IN_REQUEST";
 export const LOG_IN_SUCCESS = "LOG_IN_SUCCESS";
 export const LOG_IN_FAILURE = "LOG_IN_FAILURE";
+
+export const LOG_OUT_REQUEST = "LOG_OUT_REQUEST";
+export const LOG_OUT_SUCCESS = "LOG_OUT_SUCCESS";
+export const LOG_OUT_FAILURE = "LOG_OUT_FAILURE";
 
 const reducer = (state=initialState, action) => 
     produce(state, (draft) => {
@@ -39,6 +46,24 @@ const reducer = (state=initialState, action) =>
                 draft.loginLoading = false;
                 draft.loginDone = false;
                 draft.loginError = action.error;
+                break;
+
+            case LOG_OUT_REQUEST:
+                draft.logoutLoading = true;
+                draft.logoutDone = false;
+                draft.logoutError = null;
+                break;
+    
+            case LOG_OUT_SUCCESS:
+                draft.logoutLoading = false;
+                draft.logoutDone = true;
+                draft.info = null;
+                break;
+    
+            case LOG_OUT_FAILURE:
+                draft.logoutLoading = false;
+                draft.logoutDone = false;
+                draft.logoutError = action.error;
                 break;
 
             default:

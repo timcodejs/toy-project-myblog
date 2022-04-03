@@ -8,11 +8,14 @@ import { LOAD_ALLPOSTS_REQUEST } from "../../reducer/post";
 const HomeMain = () => {
     const dispatch = useDispatch();
     const { allPosts } = useSelector((state) => state.post);
+    const { info } = useSelector((state) => state.user);
 
     useEffect(() => {
-        dispatch({
-            type: LOAD_ALLPOSTS_REQUEST,
-        })
+        if(!info) {
+            dispatch({
+                type: LOAD_ALLPOSTS_REQUEST,
+            })
+        }
     }, [dispatch]);
 
     return(
